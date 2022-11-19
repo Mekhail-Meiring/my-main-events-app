@@ -1,5 +1,7 @@
 package za.co.simpleChat.models;
 
+import java.util.List;
+
 public class Client {
 
     private String name;

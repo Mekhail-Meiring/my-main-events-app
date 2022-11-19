@@ -2,9 +2,14 @@ package za.co.simpleChat;
 
 import io.javalin.Javalin;
 import io.javalin.http.Context;
-import za.co.simpleChat.api.ApiHandler;
-import za.co.simpleChat.api.Clients;
+import kong.unirest.json.JSONObject;
+import org.eclipse.jetty.util.ajax.JSONObjectConvertor;
+import za.co.simpleChat.models.Clients;
 import za.co.simpleChat.models.Client;
+import za.co.simpleChat.models.Message;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ClientService {
 
@@ -18,6 +23,7 @@ public class ClientService {
 
     private Clients clients;
 
+    private final List<Message> messageDataBase = new ArrayList<>();
 
     public ClientService initialise(){
         server = configureHttpServer();
@@ -29,7 +35,7 @@ public class ClientService {
                 .post("/login", this::login)
                 .get("/people", this::getPeople)
                 .post("/message", this::sendMessage)
-                .get("/messages/{email}", this::getMessages)
+                .get("/messages/{fromPersonEmail}/{toPersonEmail}", this::getMessages)
                 ;
     }
 
@@ -45,10 +51,18 @@ public class ClientService {
         this.server.stop();
     }
 
+    public int amountOfClients(){
+        return clients.getListOfClients().size();
+    }
+
+    public int sizeOfMessageDataBase(){
+        return messageDataBase.size();
+    }
+
 
     private void login(Context context){
         clients.addClient(context.bodyAsClass(Client.class));
-        context.result("done");
+        context.result("Success");
     }
 
     private void getPeople(Context context) {
@@ -56,10 +70,25 @@ public class ClientService {
     }
 
     private void sendMessage(Context context) {
-
+        Message message = context.bodyAsClass(Message.class);
+        messageDataBase.add(message);
+        context.result("message Sent");
     }
 
     private void getMessages(Context context) {
+        List<Message> messagesHistory = new ArrayList<>();
+
+        String fromPersonEmail = context.pathParam("fromPersonEmail");
+        String toPersonEmail = context.pathParam("toPersonEmail");
+
+        messageDataBase.forEach(message -> {
+            if (message.getFromPersonEmail().equalsIgnoreCase(fromPersonEmail)
+            && message.getToPersonEmail().equalsIgnoreCase(toPersonEmail)){
+                messagesHistory.add(message);
+            }
+        });
+
+        context.json(messagesHistory);
     }
 
 }
