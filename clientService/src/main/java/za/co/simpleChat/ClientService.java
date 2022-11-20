@@ -7,6 +7,11 @@ import models.Message;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * <h3>Responsible for managing the clients of Simple-Chat.</h3>
+ * <p>This class does all the thinking for managing clients. Then it can provide data about these clients to other services</p>
+ */
 public class ClientService {
 
     public static void main(String[] args) {
@@ -21,11 +26,14 @@ public class ClientService {
 
     private final List<Message> messageDataBase = new ArrayList<>();
 
+
     public ClientService initialise(){
         server = configureHttpServer();
         clients = new Clients();
         return this;
     }
+
+
     private Javalin configureHttpServer() {
         return Javalin.create()
                 .post("/login", this::login)
@@ -56,21 +64,40 @@ public class ClientService {
     }
 
 
+    /**
+     * Functionality of the "/login" api end point.
+     * @param context Server context.
+     */
     private void login(Context context){
         clients.addClient(context.bodyAsClass(Client.class));
         context.result("Success");
     }
 
+
+    /**
+     * Functionality of the "/people" API end-point.
+     * @param context Server context.
+     */
     private void getPeople(Context context) {
         context.json(clients);
     }
 
+
+    /**
+     * Functionality of the "/message" API end-point.
+     * @param context Server context.
+     */
     private void sendMessage(Context context) {
         Message message = context.bodyAsClass(Message.class);
         messageDataBase.add(message);
         context.result("message Sent");
     }
 
+
+    /**
+     * Functionality of the "/messages/{fromPersonEmail}/{toPersonEmail}" API end-point.
+     * @param context Server context.
+     */
     private void getMessages(Context context) {
         List<Message> messagesHistory = new ArrayList<>();
 
