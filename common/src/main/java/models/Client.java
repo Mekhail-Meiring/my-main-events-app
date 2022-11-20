@@ -1,7 +1,9 @@
-package za.co.simpleChat.models;
+package models;
 
-import java.util.List;
 
+/**
+ * POJO used to parse to and from Json.
+ */
 public class Client {
 
     private String name;

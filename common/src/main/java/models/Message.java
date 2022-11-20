@@ -1,7 +1,8 @@
-package za.co.simpleChat.models;
+package models;
 
-import java.util.HashMap;
-
+/**
+ * POJO used to parse to and from Json.
+ */
 public class Message {
 
     private String fromPersonEmail;
