@@ -22,14 +22,14 @@ public class ClientService {
     private Javalin server;
     private final int DEFAULT_PORT = 8080;
 
-    private Clients clients;
+    private List<Client> clients;
 
     private final List<Message> messageDataBase = new ArrayList<>();
 
 
     public ClientService initialise(){
         server = configureHttpServer();
-        clients = new Clients();
+        clients = new ArrayList<>();
         return this;
     }
 
@@ -56,7 +56,7 @@ public class ClientService {
     }
 
     public int amountOfClients(){
-        return clients.getListOfClients().size();
+        return clients.size();
     }
 
     public int sizeOfMessageDataBase(){
@@ -69,8 +69,8 @@ public class ClientService {
      * @param context Server context.
      */
     private void login(Context context){
-        clients.addClient(context.bodyAsClass(Client.class));
-        context.result("Success");
+        clients.add(context.bodyAsClass(Client.class));
+        context.json(clients);
     }
 
 
