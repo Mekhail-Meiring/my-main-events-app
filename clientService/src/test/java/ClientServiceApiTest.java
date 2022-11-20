@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import kong.unirest.HttpResponse;
 import kong.unirest.HttpStatus;
 import kong.unirest.JsonNode;
@@ -14,9 +13,8 @@ import org.junit.jupiter.api.*;
 import testmodels.Login;
 import testmodels.SampleMessage;
 import za.co.simpleChat.ClientService;
-import za.co.simpleChat.models.Client;
-import za.co.simpleChat.models.Clients;
-import za.co.simpleChat.models.Message;
+import models.Client;
+import models.Message;
 
 
 import static org.junit.jupiter.api.Assertions.*;
