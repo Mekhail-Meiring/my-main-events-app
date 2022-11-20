@@ -2,12 +2,8 @@ package za.co.simpleChat;
 
 import io.javalin.Javalin;
 import io.javalin.http.Context;
-import kong.unirest.json.JSONObject;
-import org.eclipse.jetty.util.ajax.JSONObjectConvertor;
-import za.co.simpleChat.models.Clients;
-import za.co.simpleChat.models.Client;
-import za.co.simpleChat.models.Message;
-
+import models.Client;
+import models.Message;
 import java.util.ArrayList;
 import java.util.List;
 
