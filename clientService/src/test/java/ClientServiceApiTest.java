@@ -4,14 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import kong.unirest.HttpResponse;
 import kong.unirest.HttpStatus;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
+import kong.unirest.json.JSONArray;
 import org.junit.jupiter.api.*;
 import testmodels.Login;
 import testmodels.SampleMessage;
 import za.co.simpleChat.ClientService;
+import za.co.simpleChat.models.Client;
+import za.co.simpleChat.models.Clients;
 import za.co.simpleChat.models.Message;
 
 
@@ -37,6 +41,7 @@ public class ClientServiceApiTest {
 
     @Test
     @Order(1)
+    @DisplayName("Check to see if you can log into the database.")
     public void successfulLogin(){
 
         HttpResponse<JsonNode> post = Unirest.post( serverUrl() + "/login" )
@@ -48,6 +53,7 @@ public class ClientServiceApiTest {
 
     @Test
     @Order(2)
+    @DisplayName("Check to see if you can send a message.")
     public void canSendAMessageToAnotherClient(){
         HttpResponse<JsonNode> post2 = Unirest.post( serverUrl() + "/login" )
                 .body(new Login("Hogan", "123hogan@gmail.com")).asJson();
@@ -73,6 +79,7 @@ public class ClientServiceApiTest {
 
     @Test
     @Order(3)
+    @DisplayName("Check to see if you can get receive a message")
     public void canSeeAMessageFromAnotherPerson(){
         assertEquals(2, clientService.amountOfClients());
         assertEquals( clientService.sizeOfMessageDataBase(), 1);
@@ -97,9 +104,24 @@ public class ClientServiceApiTest {
 
     @Test
     @Order(4)
+    @DisplayName("Check for people in the database.")
     public void peopleInDatabase(){
         HttpResponse<JsonNode> response = Unirest.get( serverUrl() + "/people").asJson();
         System.out.println(response.getBody());
+
+        List<String> listOfPeopleEmail = List.of("123mekhail@gmail.com", "123hogan@gmail.com");
+        List<String> listOfPeopleNames = List.of("Mekhail", "Hogan");
+
+        JSONArray clientsJsonArray =(JSONArray) response.getBody().getObject().get("listOfClients");
+        Gson gson = new Gson();
+        clientsJsonArray.forEach(
+                clientInformation->{
+                    Client client = gson.fromJson(clientInformation.toString(), Client.class);
+                    assertTrue(listOfPeopleEmail.contains(client.getEmail()));
+                    assertTrue(listOfPeopleNames.contains(client.getName()));
+                }
+        );
+
     }
 
 
