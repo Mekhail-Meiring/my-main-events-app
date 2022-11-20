@@ -84,13 +84,15 @@ public class ClientServiceApiTest {
 
         HttpResponse<JsonNode> response = Unirest.get( serverUrl() + "/messages/123mekhail@gmail.com/123hogan@gmail.com").asJson();
 
-        Gson gson = new Gson();
+        assertEquals(HttpStatus.OK, response.getStatus());
 
         List<SampleMessage> sampleMessageHistory = new ArrayList<>();
 
-        response.getBody().getArray().forEach(
+        JSONArray jsonArray = response.getBody().getArray();
+
+        jsonArray.forEach(
                 message -> {
-                    Message m = gson.fromJson(message.toString(), Message.class);
+                    Message m = new Gson().fromJson(message.toString(), Message.class);
                     assertEquals("123mekhail@gmail.com", m.getFromPersonEmail());
                     assertEquals("123hogan@gmail.com", m.getToPersonEmail());
                     assertEquals("Awe", m.getMessageBody());
@@ -105,16 +107,15 @@ public class ClientServiceApiTest {
     @DisplayName("Check for people in the database.")
     public void peopleInDatabase(){
         HttpResponse<JsonNode> response = Unirest.get( serverUrl() + "/people").asJson();
-        System.out.println(response.getBody());
+
+        assertEquals(HttpStatus.OK, response.getStatus());
 
         List<String> listOfPeopleEmail = List.of("123mekhail@gmail.com", "123hogan@gmail.com");
         List<String> listOfPeopleNames = List.of("Mekhail", "Hogan");
 
-        JSONArray clientsJsonArray =(JSONArray) response.getBody().getObject().get("listOfClients");
-        Gson gson = new Gson();
-        clientsJsonArray.forEach(
+        response.getBody().getArray().forEach(
                 clientInformation->{
-                    Client client = gson.fromJson(clientInformation.toString(), Client.class);
+                    Client client = new Gson().fromJson(clientInformation.toString(), Client.class);
                     assertTrue(listOfPeopleEmail.contains(client.getEmail()));
                     assertTrue(listOfPeopleNames.contains(client.getName()));
                 }
