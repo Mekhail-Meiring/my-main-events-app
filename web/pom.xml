@@ -27,6 +27,7 @@
             <artifactId>clientService</artifactId>
             <version>${project.version}</version>
         </dependency>
+
         <dependency>
             <groupId>com.konghq</groupId>
             <artifactId>unirest-java</artifactId>

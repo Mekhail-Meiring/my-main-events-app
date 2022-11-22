@@ -3,11 +3,11 @@ import kong.unirest.HttpResponse;
 import kong.unirest.HttpStatus;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
-import models.Client;
-import models.Message;
+import za.co.simpleChat.models.Client;
+import za.co.simpleChat.models.Event;
 import org.junit.jupiter.api.*;
-import testmodels.Login;
-import testmodels.SampleMessage;
+import za.co.simpleChat.models.testmodels.Login;
+import za.co.simpleChat.models.testmodels.SampleEvent;
 import za.co.simpleChat.ClientService;
 import za.co.simpleChat.WebServer;
 
@@ -66,9 +66,9 @@ public class WebServiceApiTest {
         String time = localDate.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm"));
         String date = localDate.toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 
-        HttpResponse<JsonNode> post3 = Unirest.post( webServerUrl() + "/message" )
-                .body(new SampleMessage(
-                        "123mekhail@gmail.com", "123hogan@gmail.com"
+        HttpResponse<JsonNode> post3 = Unirest.post( webServerUrl() + "/event" )
+                .body(new SampleEvent(
+                        "123mekhail@gmail.com"
                         , time, date, "Awe")
                 ).asJson();
 
@@ -79,19 +79,18 @@ public class WebServiceApiTest {
     @Test
     @Order(3)
     public void getMessageFromClientServer(){
-        HttpResponse<JsonNode> response = Unirest.get( webServerUrl()+"/messages/123mekhail@gmail.com/123hogan@gmail.com")
+        HttpResponse<JsonNode> response = Unirest.get( webServerUrl()+"/events/123mekhail@gmail.com")
                 .asJson();
         assertEquals(HttpStatus.OK, response.getStatus());
 
 
         response.getBody().getArray().forEach(
                 message -> {
-                    Message m = new Gson().fromJson(message.toString(), Message.class);
-                    assertEquals("123mekhail@gmail.com", m.getFromPersonEmail());
-                    assertEquals("123hogan@gmail.com", m.getToPersonEmail());
-                    assertEquals("Awe", m.getMessageBody());
-                    assertNotNull(m.getDate());
-                    assertNotNull(m.getTime());
+                    Event m = new Gson().fromJson(message.toString(), Event.class);
+                    assertEquals("123mekhail@gmail.com", m.fromPersonEmail);
+                    assertEquals("Awe", m.description);
+                    assertNotNull(m.date);
+                    assertNotNull(m.time);
                 }
         );
     }

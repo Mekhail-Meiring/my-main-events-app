@@ -2,10 +2,11 @@ package za.co.simpleChat;
 
 import io.javalin.Javalin;
 import io.javalin.http.Context;
-import models.Client;
-import models.Message;
+import za.co.simpleChat.models.Client;
+import za.co.simpleChat.models.Event;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 /**
@@ -24,7 +25,7 @@ public class ClientService {
 
     private List<Client> clients;
 
-    private final List<Message> messageDataBase = new ArrayList<>();
+    private final List<Event> eventsDatabase = new ArrayList<>();
 
 
     public ClientService initialise(){
@@ -38,9 +39,8 @@ public class ClientService {
         return Javalin.create()
                 .post("/login", this::login)
                 .get("/people", this::getPeople)
-                .post("/message", this::sendMessage)
-                .get("/messages/{fromPersonEmail}/{toPersonEmail}", this::getMessages)
-                ;
+                .post("/event", this::createEvent)
+                .get("/events/{fromPersonEmail}", this::getEvents);
     }
 
     public void startServer(){
@@ -59,8 +59,21 @@ public class ClientService {
         return clients.size();
     }
 
-    public int sizeOfMessageDataBase(){
-        return messageDataBase.size();
+    public int sizeOfEventsDatabase(){
+        return eventsDatabase.size();
+    }
+
+    private boolean isClientInDatabase(Client client){
+
+        AtomicBoolean clientExists = new AtomicBoolean(false);
+
+        clients.forEach(c -> {
+            if (c.getName().equalsIgnoreCase(client.getName()) && c.getEmail().equalsIgnoreCase(client.getEmail())){
+                clientExists.set(true);
+            }
+        });
+
+        return clientExists.get();
     }
 
 
@@ -69,7 +82,11 @@ public class ClientService {
      * @param context Server context.
      */
     private void login(Context context){
-        clients.add(context.bodyAsClass(Client.class));
+
+        Client client = context.bodyAsClass(Client.class);
+        if (!isClientInDatabase(client)) {
+            clients.add(client);
+        }
         context.json(clients);
     }
 
@@ -84,13 +101,13 @@ public class ClientService {
 
 
     /**
-     * Functionality of the "/message" API end-point.
+     * Functionality of the "/event" API end-point.
      * @param context Server context.
      */
-    private void sendMessage(Context context) {
-        Message message = context.bodyAsClass(Message.class);
-        messageDataBase.add(message);
-        context.result("message Sent");
+    private void createEvent(Context context) {
+        Event event = context.bodyAsClass(Event.class);
+        eventsDatabase.add(event);
+        context.result("Event created");
     }
 
 
@@ -98,20 +115,18 @@ public class ClientService {
      * Functionality of the "/messages/{fromPersonEmail}/{toPersonEmail}" API end-point.
      * @param context Server context.
      */
-    private void getMessages(Context context) {
-        List<Message> messagesHistory = new ArrayList<>();
+    private void getEvents(Context context) {
+        List<Event> eventHistory = new ArrayList<>();
 
         String fromPersonEmail = context.pathParam("fromPersonEmail");
-        String toPersonEmail = context.pathParam("toPersonEmail");
 
-        messageDataBase.forEach(message -> {
-            if (message.getFromPersonEmail().equalsIgnoreCase(fromPersonEmail)
-            && message.getToPersonEmail().equalsIgnoreCase(toPersonEmail)){
-                messagesHistory.add(message);
+        eventsDatabase.forEach(event -> {
+            if ( event.fromPersonEmail.equalsIgnoreCase(fromPersonEmail)) {
+                eventHistory.add(event);
             }
         });
 
-        context.json(messagesHistory);
+        context.json(eventHistory);
     }
 
 }

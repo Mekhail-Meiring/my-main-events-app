@@ -1,4 +1,4 @@
-package models;
+package za.co.simpleChat.models;
 
 
 /**

@@ -1,4 +1,4 @@
-package testmodels;
+package za.co.simpleChat.models.testmodels;
 
 /**
  * POJO used to parse to Json.

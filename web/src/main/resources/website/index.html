@@ -1,10 +1,82 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pangolin">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/styles/index.css">
 </head>
 <body>
+
+    <section id="app"></section>
+    <section id="send-message"></section>
+    <section id="message-body"></section>
+
+    <script id="login-section" type="text/handlebars-template">
+
+        <section id="login">
+            <h2>Simple-chat login</h2>
+            <form id="login-form">
+                <label for="name"><b>Username</b></label>
+                <input type="text" name="name" id="name" placeholder="Enter your Username" required>
+
+                <label for="email"><b>Email</b></label>
+                <input type="email" name="email" id="email" placeholder="Enter your Email" required>
+
+                <input type="submit" value="Login">
+            </form>
+        </section>
+    </script>
+
+
+    <script id="people-section" type="text/handlebars-template">
+        <h1>People</h1>
+            <section id="peopleSection">
+                {{#each person}}
+                    <button value="{{this.email}}" onclick="getEvents(this)">{{this.name}}</button>
+                {{/each}}
+            </section>
+    </script>
+
+
+    <script id="chat-message-section" type="text/handlebars-template">
+        <h1>Events</h1>
+        <section id="message">
+
+            {{#each messageHistory}}
+                <div>
+                    <h6>Date: {{this.date}}</h6>
+                    <h6>Date: {{this.time}}</h6>
+                    <h6>from: {{this.fromPersonEmail}}</h6>
+                    <p>Description: {{this.description}}</p>
+                </div>
+            {{/each}}
+
+        </section>
+    </script>
+
+    <script id="send-message-section" type="text/handlebars-template">
+        <h3>Create new event</h3>
+        <form id="message-form">
+            <input type="hidden" value="{{fromPersonEmail}}" name="fromPersonEmail">
+
+            <label for="date">Date :</label>
+            <input type="date" name="date" id="date">
+
+            <label for="time">Time :</label>
+            <input type="time" name="time" id="time">
+
+            <label for="description">Description :</label>
+            <input type="text" name="description" placeholder="Describe your event" id="description">
+            <input type="submit" value="Create">
+        </form>
+    </script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
+
+    <script src="js/index.js"></script>
 
 </body>
 </html>

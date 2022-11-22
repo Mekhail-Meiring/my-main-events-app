@@ -7,15 +7,18 @@ import io.javalin.http.staticfiles.Location;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
-import models.Client;
-import models.Message;
+import za.co.simpleChat.models.Client;
+import za.co.simpleChat.models.Event;
+
+import javax.jms.Message;
+import javax.jms.MessageListener;
 
 
 /**
  * <h3>Responsible for providing data to the front-end of Simple-Chat.</h3>
  * <p>This class communicates with other services acting like the middle man for the client.</p>
  */
-public class WebServer {
+public class WebServer implements MessageListener {
 
     public static void main(String[] args) {
         WebServer webServer = new WebServer().initialise();
@@ -37,26 +40,23 @@ public class WebServer {
         return Javalin.create(config -> config.addStaticFiles(PAGES_DIR, Location.CLASSPATH))
                 .post("/login", this::login)
                 .get("/people", this::getPeople)
-                .post("/message", this::sendMessage)
-                .get("/messages/{fromPersonEmail}/{toPersonEmail}", this::getMessages);
+                .post("/event", this::createEvent)
+                .get("/events/{fromPersonEmail}", this::getEvents);
     }
 
 
     /**
-     * Functionality of the "/messages/{fromPersonEmail}/{toPersonEmail}" API end-point.
+     * Functionality of the "/events/{fromPersonEmail}" API end-point.
      * @param context Server context.
      */
-    private void getMessages(Context context) {
+    private void getEvents(Context context) {
 
         String fromPersonEmail = context.pathParam("fromPersonEmail");
-        String toPersonEmail = context.pathParam("toPersonEmail");
-
-        HttpResponse<JsonNode> response = Unirest.get( clientServiceUrl() + "/messages/"+fromPersonEmail+"/"+toPersonEmail)
+        HttpResponse<JsonNode> response = Unirest.get( clientServiceUrl() + "/events/"+fromPersonEmail)
                 .asJson();
 
-        Message[] messages = new Gson().fromJson(response.getBody().toString(), Message[].class);
-        context.json(messages);
-
+        Event[] messageDTOS = new Gson().fromJson(response.getBody().toString(), Event[].class);
+        context.json(messageDTOS);
     }
 
 
@@ -64,9 +64,9 @@ public class WebServer {
      * Functionality of the "/message" API end-point.
      * @param context Server context.
      */
-    private void sendMessage(Context context) {
-        HttpResponse<JsonNode> post = Unirest.post( clientServiceUrl() + "/message")
-                .body(context.bodyAsClass(Message.class)).asJson();
+    private void createEvent(Context context) {
+        HttpResponse<JsonNode> post = Unirest.post( clientServiceUrl() + "/event")
+                .body(context.bodyAsClass(Event.class)).asJson();
 
         System.out.println(post.toString());
     }
@@ -87,6 +87,7 @@ public class WebServer {
      * @param context Server context.
      */
     private void login(Context context) {
+
         HttpResponse<JsonNode> post = Unirest.post( clientServiceUrl() + "/login" )
                 .body(context.bodyAsClass(Client.class)).asJson();
 
@@ -116,5 +117,10 @@ public class WebServer {
      */
     private String clientServiceUrl(){
         return "http://localhost:8080";
+    }
+
+    @Override
+    public void onMessage(Message message) {
+
     }
 }
