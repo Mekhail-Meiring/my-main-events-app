@@ -55,3 +55,45 @@ input[type=submit] {
 input[type=submit]:hover {
     background-color: #45a049;
 }
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 5px;
+    margin-bottom: 50px;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav li {
+    margin: 0 10px;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+nav a:hover {
+    color: black;
+}
+
+table, th, td {
+    border: 5px solid white;
+    border-collapse: collapse;
+    width: 300px;
+    margin-top: 50px;
+    padding-left: 10px;
+}
+th, td {
+    background-color: #4CAF50;
+}
