@@ -1,4 +1,4 @@
-package za.co.simpleChat;
+package za.co.mainEvent;
 
 import io.javalin.Javalin;
 import io.javalin.http.Context;
