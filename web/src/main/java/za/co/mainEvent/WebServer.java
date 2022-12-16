@@ -41,7 +41,7 @@ public class WebServer implements MessageListener {
                 .post("/login", this::login)
                 .get("/people", this::getPeople)
                 .post("/event", this::createEvent)
-                .get("/events/{fromPersonEmail}", this::getEvents);
+                .get("/events", this::getEvents);
     }
 
 
@@ -51,8 +51,7 @@ public class WebServer implements MessageListener {
      */
     private void getEvents(Context context) {
 
-        String fromPersonEmail = context.pathParam("fromPersonEmail");
-        HttpResponse<JsonNode> response = Unirest.get( clientServiceUrl() + "/events/"+fromPersonEmail)
+        HttpResponse<JsonNode> response = Unirest.get( clientServiceUrl() + "/events")
                 .asJson();
 
         Event[] messageDTOS = new Gson().fromJson(response.getBody().toString(), Event[].class);
