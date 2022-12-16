@@ -115,7 +115,6 @@ public class ClientServiceApiTest {
                 clientInformation->{
                     Client client = new Gson().fromJson(clientInformation.toString(), Client.class);
                     assertTrue(listOfPeopleEmail.contains(client.getEmail()));
-                    assertTrue(listOfPeopleNames.contains(client.getName()));
                 }
         );
 
