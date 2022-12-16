@@ -43,7 +43,7 @@ public class ClientServiceApiTest {
     public void successfulLogin(){
 
         HttpResponse<JsonNode> post = Unirest.post( serverUrl() + "/login" )
-                .body(new Login("Mekhail", "123mekhail@gmail.com")).asJson();
+                .body(new Login("123mekhail@gmail.com")).asJson();
 
         assertEquals( HttpStatus.OK, post.getStatus() );
         assertEquals(1, clientService.amountOfClients());
@@ -54,7 +54,7 @@ public class ClientServiceApiTest {
     @DisplayName("Check to see if you can send a message.")
     public void canSendAMessageToAnotherClient(){
         HttpResponse<JsonNode> post2 = Unirest.post( serverUrl() + "/login" )
-                .body(new Login("Hogan", "123hogan@gmail.com")).asJson();
+                .body(new Login("123hogan@gmail.com")).asJson();
 
         assertEquals( HttpStatus.OK, post2.getStatus() );
         assertEquals(2, clientService.amountOfClients());
@@ -81,7 +81,7 @@ public class ClientServiceApiTest {
         assertEquals(2, clientService.amountOfClients());
         assertEquals( clientService.sizeOfEventsDatabase(), 1);
 
-        HttpResponse<JsonNode> response = Unirest.get( serverUrl() + "/events/123mekhail@gmail.com").asJson();
+        HttpResponse<JsonNode> response = Unirest.get( serverUrl() + "/events").asJson();
 
         assertEquals(HttpStatus.OK, response.getStatus());
 

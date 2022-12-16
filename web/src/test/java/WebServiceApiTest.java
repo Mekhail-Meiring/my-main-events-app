@@ -47,7 +47,7 @@ public class WebServiceApiTest {
     @Order(1)
     public void canLoginToClientServer(){
         HttpResponse<JsonNode> post = Unirest.post( webServerUrl() + "/login" )
-                .body(new Login("Mekhail", "123mekhail@gmail.com")).asJson();
+                .body(new Login("123mekhail@gmail.com")).asJson();
 
         assertEquals( HttpStatus.OK, post.getStatus() );
         assertEquals(1, post.getBody().getArray().length());
@@ -57,7 +57,7 @@ public class WebServiceApiTest {
     @Order(2)
     public void canSendMessagesToClientServer(){
         HttpResponse<JsonNode> post2 = Unirest.post( webServerUrl() + "/login" )
-                .body(new Login("Hogan", "123hogan@gmail.com")).asJson();
+                .body(new Login("123hogan@gmail.com")).asJson();
 
         assertEquals( HttpStatus.OK, post2.getStatus() );
 
@@ -79,7 +79,7 @@ public class WebServiceApiTest {
     @Test
     @Order(3)
     public void getMessageFromClientServer(){
-        HttpResponse<JsonNode> response = Unirest.get( webServerUrl()+"/events/123mekhail@gmail.com")
+        HttpResponse<JsonNode> response = Unirest.get( webServerUrl()+"/events")
                 .asJson();
         assertEquals(HttpStatus.OK, response.getStatus());
 
@@ -108,7 +108,6 @@ public class WebServiceApiTest {
                 clientInformation->{
                     Client client = new Gson().fromJson(clientInformation.toString(), Client.class);
                     assertTrue(listOfPeopleEmail.contains(client.getEmail()));
-                    assertTrue(listOfPeopleNames.contains(client.getName()));
                 }
         );
     }
