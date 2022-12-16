@@ -68,7 +68,7 @@ public class ClientService {
         AtomicBoolean clientExists = new AtomicBoolean(false);
 
         clients.forEach(c -> {
-            if (c.getName().equalsIgnoreCase(client.getName()) && c.getEmail().equalsIgnoreCase(client.getEmail())){
+            if (c.getEmail().equalsIgnoreCase(client.getEmail())){
                 clientExists.set(true);
             }
         });
