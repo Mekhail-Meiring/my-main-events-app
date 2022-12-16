@@ -40,7 +40,7 @@ public class ClientService {
                 .post("/login", this::login)
                 .get("/people", this::getPeople)
                 .post("/event", this::createEvent)
-                .get("/events/{fromPersonEmail}", this::getEvents);
+                .get("/events", this::getEvents);
     }
 
     public void startServer(){
