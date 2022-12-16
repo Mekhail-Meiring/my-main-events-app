@@ -116,17 +116,7 @@ public class ClientService {
      * @param context Server context.
      */
     private void getEvents(Context context) {
-        List<Event> eventHistory = new ArrayList<>();
-
-        String fromPersonEmail = context.pathParam("fromPersonEmail");
-
-        eventsDatabase.forEach(event -> {
-            if ( event.fromPersonEmail.equalsIgnoreCase(fromPersonEmail)) {
-                eventHistory.add(event);
-            }
-        });
-
-        context.json(eventHistory);
+        context.json(eventsDatabase);
     }
 
 }
