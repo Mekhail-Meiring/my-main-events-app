@@ -13,7 +13,7 @@ import org.junit.jupiter.api.*;
 import za.co.simpleChat.models.Event;
 import za.co.simpleChat.models.testmodels.Login;
 import za.co.simpleChat.models.testmodels.SampleEvent;
-import za.co.simpleChat.ClientService;
+import za.co.mainEvent.ClientService;
 import za.co.simpleChat.models.Client;
 
 

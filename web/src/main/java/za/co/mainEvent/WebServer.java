@@ -1,4 +1,4 @@
-package za.co.simpleChat;
+package za.co.mainEvent;
 
 import com.google.gson.Gson;
 import io.javalin.Javalin;

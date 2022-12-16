@@ -8,8 +8,8 @@ import za.co.simpleChat.models.Event;
 import org.junit.jupiter.api.*;
 import za.co.simpleChat.models.testmodels.Login;
 import za.co.simpleChat.models.testmodels.SampleEvent;
-import za.co.simpleChat.ClientService;
-import za.co.simpleChat.WebServer;
+import za.co.mainEvent.ClientService;
+import za.co.mainEvent.WebServer;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
