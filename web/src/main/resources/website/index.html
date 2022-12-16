@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Main-Events</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pangolin">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="/styles/index.css">
@@ -10,17 +10,18 @@
 <body>
 
     <section id="app"></section>
-    <section id="send-message"></section>
-    <section id="message-body"></section>
+
+    <script id="default-template" type="text/handlebars-template">
+        <div>
+            <h1>OOPS 404 Page not found!</h1>
+            <a id="404-home" href="#/events">Home</a>
+        </div>
+    </script>
 
     <script id="login-section" type="text/handlebars-template">
-
         <section id="login">
-            <h2>Simple-chat login</h2>
+            <h2>Main-Events login</h2>
             <form id="login-form">
-                <label for="name"><b>Username</b></label>
-                <input type="text" name="name" id="name" placeholder="Enter your Username" required>
-
                 <label for="email"><b>Email</b></label>
                 <input type="email" name="email" id="email" placeholder="Enter your Email" required>
 
@@ -31,34 +32,47 @@
 
 
     <script id="people-section" type="text/handlebars-template">
+<!--        Rate people events-->
         <h1>People</h1>
             <section id="peopleSection">
                 {{#each person}}
-                    <button value="{{this.email}}" onclick="getEvents(this)">{{this.name}}</button>
+                    <button value="{{this.email}}" onclick="events(this)">{{this.name}}</button>
                 {{/each}}
             </section>
     </script>
 
 
-    <script id="chat-message-section" type="text/handlebars-template">
+    <script id="main-events-section" type="text/handlebars-template">
         <h1>Events</h1>
-        <section id="message">
-
+        <section id="newEvent">
             {{#each messageHistory}}
-                <div>
-                    <h6>Date: {{this.date}}</h6>
-                    <h6>Date: {{this.time}}</h6>
-                    <h6>from: {{this.fromPersonEmail}}</h6>
-                    <p>Description: {{this.description}}</p>
-                </div>
+                <table>
+                    <tr>
+                        <th>Date</th>
+                        <td>{{this.date}}</td>
+                    </tr>
+                    <tr>
+                        <th>Time</th>
+                        <td>{{this.time}}</td>
+                    </tr>
+                    <tr>
+                        <th>From</th>
+                        <td>{{this.fromPersonEmail}}</td>
+                    </tr>
+                    <tr>
+                        <th>Description</th>
+                        <td>{{this.description}}</td>
+                    </tr>
+                </table>
             {{/each}}
 
         </section>
     </script>
 
-    <script id="send-message-section" type="text/handlebars-template">
+
+    <script id="create-event-section" type="text/handlebars-template">
         <h3>Create new event</h3>
-        <form id="message-form">
+        <form id="create-event-form">
             <input type="hidden" value="{{fromPersonEmail}}" name="fromPersonEmail">
 
             <label for="date">Date :</label>
@@ -75,8 +89,14 @@
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-router@1.2.8/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
-    <script src="js/index.js"></script>
+    <script src="js/script.js" type="module"></script>
+    <script src="js/events.js" type="module"></script>
+    <script src="js/eventsNavBar.js" type="module"></script>
+    <script src="js/loginSection.js" type="module"></script>
 
 </body>
 </html>
