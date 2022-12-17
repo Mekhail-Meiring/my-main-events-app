@@ -1,2 +1,2 @@
-# my-simple-chat-app
-A simple chat app
+# my-main-events-app
+A simple app to check up events
